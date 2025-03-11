@@ -16,6 +16,7 @@ namespace DeepDownloader
         private CancellationTokenSource cancellationTokenSource;
         private PartData[] partsData;
         private long fileSize;
+        private DateTime downloadStartedDate;
 
         public string Url { get; private set; }
         public string Path { get; private set; }
@@ -40,7 +41,7 @@ namespace DeepDownloader
         private void UpdateProgress(int id, long bytesReceived, long totalBytes, DownloadState state)
         {
             OnProgressChanged?.Invoke(this,
-                new ProgressChangedEventArgs(id, bytesReceived, totalBytes, state));
+                new ProgressChangedEventArgs(id, bytesReceived, totalBytes, state) { TimeElapsed = DateTime.UtcNow - downloadStartedDate });
         }
     
         public async Task StartAsync()
@@ -51,6 +52,7 @@ namespace DeepDownloader
             for (int i = 0; i < TaskCount; i++) tasks[i] = Download(i);
             try
             {
+                downloadStartedDate = DateTime.UtcNow;
                 await Task.WhenAll(tasks);
                 await Merge();
                 UpdateProgress(-1, fileSize, fileSize, DownloadState.Completed);
