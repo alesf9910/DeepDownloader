@@ -275,7 +275,3 @@ La clase principal utilizada para descargar el archivo.
 ## Licencia
 
 Esta biblioteca es de código abierto y está disponible bajo la licencia MIT.
-
----
-
-This README provides both English and Spanish instructions to help users understand how to use your library effectively. Feel free to customize it further!
